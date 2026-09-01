@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Calcolatore Stipendio Netto
+    </title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f5f8;
+            color: #222;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow:
+                0 8px 30px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            margin-top: 0;
+            text-align: center;
+            color: #1f3c88;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .description {
+            font-size: 13px;
+            color: #777;
+            margin-top: 5px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            background: white;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #1f3c88;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #162d68;
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            background: #eef4ff;
+            border-radius: 12px;
+        }
+
+        .netto {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .netto-label {
+            color: #555;
+            font-size: 16px;
+        }
+
+        .netto-value {
+            font-size: 38px;
+            font-weight: bold;
+            color: #1f3c88;
+            margin-top: 8px;
+        }
+
+        .details {
+            border-top: 1px solid #d5dce8;
+            padding-top: 15px;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e5e8ed;
+        }
+
+        .row:last-child {
+            border-bottom: none;
+        }
+
+        .total {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #1f3c88;
+        }
+
+        .total .row {
+            font-size: 18px;
+        }
+
+        .total-value {
+            color: #16833b;
+            font-size: 22px;
+        }
+
+        .warning {
+            margin-top: 20px;
+            padding: 12px;
+            background: #fff8e1;
+            border-left: 4px solid #f0ad00;
+            color: #665000;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+
+            .container {
+                margin: 10px auto;
+                padding: 10px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .netto-value {
+                font-size: 30px;
+            }
+
+            .row {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+    <div class="card">
+
+        <h1>
+            Calcolatore Stipendio Netto
+        </h1>
+
+        <div class="subtitle">
+            Piemonte - stima dello stipendio netto
+        </div>
+
+
+        <form method="POST">
+
+
+            <!-- RAL -->
+
+            <div class="form-group">
+
+                <label for="ral">
+                    Reddito annuo lordo (RAL)
+                </label>
+
+                <input
+                    type="number"
+                    id="ral"
+                    name="ral"
+                    min="0"
+                    step="100"
+                    placeholder="Es. 35000"
+                    required
+                >
+
+            </div>
+
+
+            <!-- CONTRATTO -->
+
+            <div class="form-group">
+
+                <label for="tipo_contratto">
+                    Tipo di contratto
+                </label>
+
+                <select
+                    id="tipo_contratto"
+                    name="tipo_contratto"
+                    required
+                >
+
+                    <option value="indeterminato">
+                        Tempo indeterminato
+                    </option>
+
+                    <option value="apprendistato">
+                        Apprendistato
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- MENSILITA -->
+
+            <div class="form-group">
+
+                <label for="mensilita">
+                    Numero di mensilità
+                </label>
+
+                <select
+                    id="mensilita"
+                    name="mensilita"
+                    required
+                >
+
+                    <option value="12">
+                        12 mensilità
+                    </option>
+
+                    <option value="13">
+                        13 mensilità
+                    </option>
+
+                    <option value="14">
+                        14 mensilità
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- WELFARE -->
+
+            <div class="form-group">
+
+                <label for="welfare_annuo">
+                    Welfare / bonus ricevuti fuori dalla busta paga
+                </label>
+
+                <input
+                    type="number"
+                    id="welfare_annuo"
+                    name="welfare_annuo"
+                    min="0"
+                    step="100"
+                    value="0"
+                    placeholder="Es. 2000"
+                    required
+                >
+
+                <div class="description">
+                    Inserisci l'importo annuo complessivo
+                    ricevuto come welfare o bonus fuori
+                    dalla busta paga.
+                </div>
+
+            </div>
+
+
+            <button type="submit">
+                Calcola stipendio netto
+            </button>
+
+        </form>
+
+
+        {% if risultato %}
+
+        <div class="result">
+
+
+            <!-- NETTO MENSILE -->
+
+            <div class="netto">
+
+                <div class="netto-label">
+                    Netto per mensilità
+                </div>
+
+                <div class="netto-value">
+
+                    €
+                    {{
+                        "{:,.2f}".format(
+                            risultato.netto_mensile
+                        )
+                        .replace(",", "X")
+                        .replace(".", ",")
+                        .replace("X", ".")
+                    }}
+
+                </div>
+
+            </div>
+
+
+            <!-- DETTAGLIO -->
+
+            <div class="details">
+
+
+                <div class="row">
+
+                    <span>
+                        RAL
+                    </span>
+
+                    <strong>
+                        €
+                        {{
+                            "{:,.2f}".format(
+                                risultato.ral
+                            )
+                            .replace(",", "X")
+                            .replace(".", ",")
+                            .replace("X", ".")
+                        }}
+                    </strong>
+
+                </div>
+
+
+                <div class="row">
+
+                    <span>
+                        Contributi INPS
+                    </span>
+
+                    <strong>
+                        - €
+                        {{
+                            "{:,.2f}".format(
+                                risultato.contributi_inps
+                            )
+                            .replace(",", "X")
+                            .replace(".", ",")
+                            .replace("X", ".")
+                        }}
+                    </strong>
+
+                </div>
+
+
+                <div class="row">
+
+                    <span>
+                        Imponibile fiscale
+                    </span>
+
+                    <strong>
+                        €
+                        {{
+                            "{:,.2f}".format(
+                                risultato.imponibile_fiscale
+                            )
+                            .replace(",", "X")
+                            .replace(".", ",")
+                            .replace("X", ".")
+                        }}
+                    </strong>
+
+                </div>
+
+
+                <div class="row">
+
+                    <span>
+                        IRPEF
+                    </span>
+
+                    <strong>
+                        - €
+                        {{
+                            "{:,.2f}".format(
+                                risultato.irpef
+                            )
+                            .replace(",", "X")
+                            .replace(".", ",")
+                            .replace("X", ".")
+                        }}
+                    </strong>
+
+                </div>
+
+
+                <div class="row">
+
+                    <span>
+                        Addizionale regionale Piemonte
+                    </span>
+
+                    <strong>
+                        - €
+                        {{
+                            "{:,.2f}".format(
+                                risultato.addizionale_regionale
+                            )
+                            .replace(",", "X")
+                            .replace(".", ",")
+                            .replace("X", ".")
+                        }}
+                    </strong>
+
+                </div>
+
+
+                <div class="row">
+
+                    <span>
+                        Netto annuale da stipendio
+                    </span>
+
+                    <strong>
+                        €
+                        {{
+                            "{:,.2f}".format(
+                                risultato.netto_annuale
+                            )
+                            .replace(",", "X")
+                            .replace(".", ",")
+                            .replace("X", ".")
+                        }}
+                    </strong>
+
+                </div>
+
+
+                <div class="row">
+
+                    <span>
+                        Numero mensilità
+                    </span>
+
+                    <strong>
+                        {{ risultato.mensilita }}
+                    </strong>
+
+                </div>
+
+
+                <div class="row">
+
+                    <span>
+                        Welfare annuale
+                    </span>
+
+                    <strong>
+                        + €
+                        {{
+                            "{:,.2f}".format(
+                                risultato.welfare_annuo
+                            )
+                            .replace(",", "X")
+                            .replace(".", ",")
+                            .replace("X", ".")
+                        }}
+                    </strong>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- TOTALE -->
+
+            <div class="total">
+
+                <div class="row">
+
+                    <span>
+                        Valore complessivo annuo
+                    </span>
+
+                    <strong class="total-value">
+
+                        €
+                        {{
+                            "{:,.2f}".format(
+                                risultato.totale_annuo
+                            )
+                            .replace(",", "X")
+                            .replace(".", ",")
+                            .replace("X", ".")
+                        }}
+
+                    </strong>
+
+                </div>
+
+
+                <div class="row">
+
+                    <span>
+                        Valore medio mensile complessivo
+                    </span>
+
+                    <strong class="total-value">
+
+                        €
+                        {{
+                            "{:,.2f}".format(
+                                risultato.valore_medio_mensile
+                            )
+                            .replace(",", "X")
+                            .replace(".", ",")
+                            .replace("X", ".")
+                        }}
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="warning">
+
+                <strong>Nota:</strong>
+
+                il calcolo è una stima semplificata.
+                Al momento non sono considerate detrazioni
+                personali, addizionali comunali o altre
+                componenti fiscali.
+
+                Il welfare viene considerato come importo
+                aggiuntivo ricevuto fuori dalla busta paga
+                e non viene sottoposto alle imposte nel
+                presente modello.
+
+            </div>
+
+
+        </div>
+
+        {% endif %}
+
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
